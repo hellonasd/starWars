@@ -1,11 +1,22 @@
 import React, { Component } from "react";
-import SwapiService from "../../services/swapi-service";
+
 import ErrorButton from "../error-button";
 
 import "./item-detail.css";
 
+export const Record = ({ item, field, label }) => {
+ 
+  return (
+    <li className="list-group-item">
+      <span className="term">{label}</span>
+      <span>{item[field]}</span>
+    </li>
+  );
+};
+
+
 export default class itemDetails extends Component {
-  swapiServise = new SwapiService();
+  
 
   state = {
     item: null,
@@ -24,7 +35,6 @@ export default class itemDetails extends Component {
 
   updateItem() {
     const { itemId, getData, getImageUrl } = this.props;
-    
 
     if (!itemId) {
       return;
@@ -39,14 +49,15 @@ export default class itemDetails extends Component {
   }
 
   render() {
+    
     const { item, image } = this.state;
 
     if (!item) {
       return <span>SElect a person from a list</span>;
     }
 
-    const { name, gender, birthYear, eyeColor } = item;
-
+    const { name } = item;
+    
     return (
       <div className="person-details card">
         <img className="person-image" src={image} alt="character" />
@@ -54,18 +65,12 @@ export default class itemDetails extends Component {
         <div className="card-body">
           <h4>{name}</h4>
           <ul className="list-group list-group-flush">
-            <li className="list-group-item">
-              <span className="term">Gender</span>
-              <span>{gender}</span>
-            </li>
-            <li className="list-group-item">
-              <span className="term">Birth Year</span>
-              <span>{birthYear}</span>
-            </li>
-            <li className="list-group-item">
-              <span className="term">eye color</span>
-              <span>{eyeColor}</span>
-            </li>
+            { 
+              React.Children.map(this.props.children, (child,i)=> {
+                
+                return React.cloneElement(child, { item });
+              })
+            }
           </ul>
           <ErrorButton />
         </div>
