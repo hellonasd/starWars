@@ -12,11 +12,12 @@ const withData = (View, getData) => {
       });
     }
     render() {
+     
       const { data } = this.state;
       if (!data) {
         return <Spiner />;
       }
-      return <View {...this.props} data={data} />;
+      return <View {...this.props} data={data}/>;
     }
   };
 };

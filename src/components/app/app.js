@@ -4,6 +4,7 @@ import ErrorIndicator from "../error-indicator";
 import SwapiService from "../../services/swapi-service";
 import ItemDetails from "../item-detail";
 import { Record } from "../item-detail/item-detail";
+import { SwapiServiceProvider } from "../swapi-service-contex";
 
 import "./app.css";
 
@@ -82,12 +83,14 @@ export default class App extends React.Component {
         <Record field="costInCredits" label="Cost" />
       </ItemDetails>
     );
+
     return (
       <div className="stardb-app">
-        <Header />
-        {/* {planet} */}
+        <SwapiServiceProvider value={this.swapiService}>
+          <Header />
+          {/* {planet} */}
 
-        {/* <div className="row mb2 button-row">
+          {/* <div className="row mb2 button-row">
           <button
             className="toggle-planet btn btn-warning btn-lg"
             onClick={this.toggleRandomPlanet}
@@ -97,18 +100,22 @@ export default class App extends React.Component {
           <ErrorButton />
         </div> */}
 
-        <PersonDetails itemId={11} />
+          <PersonDetails itemId={11} />
 
-        <PlanetDetails itemId={11} />
+          <PlanetDetails itemId={5} />
 
-        <StarshipDetails itemId={9} />
+          <StarshipDetails itemId={9} />
 
-        <PersonList />
+          <PersonList />
 
-        <StarshipList />
-        <PlanetList />
+          <StarshipList />
 
-        {/* <Row left={personDetails} right={starshipDetails} /> */}
+          <PlanetList />
+
+          <PersonList app="app" />
+
+          {/* <Row left={personDetails} right={starshipDetails} /> */}
+        </SwapiServiceProvider>
       </div>
     );
   }
