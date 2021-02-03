@@ -5,6 +5,7 @@ import SwapiService from "../../services/swapi-service";
 import ItemDetails from "../item-detail";
 import { Record } from "../item-detail/item-detail";
 import { SwapiServiceProvider } from "../swapi-service-contex";
+import DummySwapiService from '../../services/dummy-swapi-service';
 
 import "./app.css";
 
@@ -18,11 +19,12 @@ import {
 } from "../sw-components/index";
 
 export default class App extends React.Component {
-  swapiService = new SwapiService();
+  swapiService = new DummySwapiService();
 
   state = {
     showRandomPlanet: true,
     hasError: false,
+    swapiService : new DummySwapiService(),
   };
 
   toggleRandomPlanet = () => {
@@ -43,6 +45,16 @@ export default class App extends React.Component {
     });
   };
 
+  onServiceChange = () => {
+    this.setState(({ swapiService })=> {
+      const Service = swapiService instanceof SwapiService ?
+                    DummySwapiService : SwapiService;
+      return {
+        swapiService : new Service()
+      }
+    })
+  }
+
   onPersonSelected = (id) => {
     this.setState({
       selectedPerson: id,
@@ -61,9 +73,8 @@ export default class App extends React.Component {
       getStarship,
       getPersonImage,
       getStarshipImage,
-      getAllPeople,
-      getAllPlanets,
-    } = this.swapiService;
+      
+    } = this.state.swapiService;
 
     const personDetails = (
       <ItemDetails itemId={11} getData={getPerson} getImageUrl={getPersonImage}>
@@ -86,8 +97,8 @@ export default class App extends React.Component {
 
     return (
       <div className="stardb-app">
-        <SwapiServiceProvider value={this.swapiService}>
-          <Header />
+        <SwapiServiceProvider value={this.state.swapiService}>
+          <Header onServiceChange={this.onServiceChange}/>
           {/* {planet} */}
 
           {/* <div className="row mb2 button-row">
@@ -111,8 +122,6 @@ export default class App extends React.Component {
           <StarshipList />
 
           <PlanetList />
-
-          <PersonList app="app" />
 
           {/* <Row left={personDetails} right={starshipDetails} /> */}
         </SwapiServiceProvider>

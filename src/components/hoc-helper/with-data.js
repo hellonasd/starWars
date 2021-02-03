@@ -1,23 +1,35 @@
 import React, { Component } from 'react'
 import Spiner from "../spiner";
 
-const withData = (View, getData) => {
-  return class extends Component {
+const withData = (View) => {
+
+  return class asd extends Component {
     state = {
       data: null,
     };
+
+    componentDidUpdate(prevProps){
+      
+      if(this.props.getData !== prevProps.getData){
+        this.update();
+      }
+    }
+
     componentDidMount() {
-      getData().then((data) => {
+      this.update();
+    }
+
+    update(){
+      this.props.getData().then((data) => {
         this.setState({ data });
       });
     }
     render() {
-     
       const { data } = this.state;
       if (!data) {
         return <Spiner />;
       }
-      return <View {...this.props} data={data}/>;
+      return <View {...this.props} data={data} />;
     }
   };
 };
