@@ -1,5 +1,6 @@
 import React from "react";
 import Header from "../header";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import ErrorIndicator from "../error-indicator";
 import SwapiService from "../../services/swapi-service";
 import { SwapiServiceProvider } from "../swapi-service-contex";
@@ -45,18 +46,19 @@ export default class App extends React.Component {
     if (this.state.hasError) {
       return <ErrorIndicator />;
     }
+    
 
     return (
       <div className="stardb-app">
         <SwapiServiceProvider value={this.state.swapiService}>
-          <Header onServiceChange={this.onServiceChange} />
-          <RandomPlanet />
-          <PeoplePage />
+          <Router>
+            <Header onServiceChange={this.onServiceChange} />
+            <RandomPlanet />
+            <Route path='/people' component={PeoplePage} />
+            <Route path='/planet' component={PlanetPage} />
+            <Route path='/starship' component={StarshipsPage} />
 
-          <PlanetPage />
-          <StarshipsPage />
-
-          {/* <Row left={personDetails} right={starshipDetails} /> */}
+          </Router>
         </SwapiServiceProvider>
       </div>
     );
