@@ -6,7 +6,7 @@ import SwapiService from "../../services/swapi-service";
 import { SwapiServiceProvider } from "../swapi-service-contex";
 import DummySwapiService from "../../services/dummy-swapi-service";
 import RandomPlanet from "../random-planet";
-import { PeoplePage, PlanetPage, StarshipsPage } from "../pages";
+import { PeoplePage, PlanetPage, StarshipsPage, SecretPage, LoginPage } from "../pages";
 import "./app.css";
 import {StarshipDetails} from "../sw-components";
 
@@ -15,7 +15,14 @@ export default class App extends React.Component {
   state = {
     hasError: false,
     swapiService: new SwapiService(),
+    isLoggedIn : false,
   };
+
+  onLogin = () => {
+    this.setState({
+      isLoggedIn : true
+    })
+  }
 
   componentDidCatch() {
     this.setState({ hasError: true });
@@ -65,7 +72,17 @@ export default class App extends React.Component {
               return <StarshipDetails itemId={id}/>
             }}
             />
-
+            <Route path='/login'
+              render={()=> (
+                <LoginPage 
+                isLoggedIn={this.state.isLoggedIn} 
+                onLogin={this.onLogin}
+                />
+              )}
+            />
+            <Route path='/secret' 
+              render={()=> (<SecretPage isLoggedIn={this.state.isLoggedIn} />)}
+            />
           </Router>
         </SwapiServiceProvider>
       </div>
